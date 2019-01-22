@@ -26,7 +26,7 @@ describe("Simplicial Complex Operators", function() {
                 it("A closed face",  SubcomplexFunctionTest.testFunction(chai, mesh, closedFaceComplexTest));
         });
 
-        describe("pureDegree", function() {
+        describe("isPureComplex", function() {
                 it("A vertex", SubcomplexFunctionTest.testFunction(chai, mesh, vertexDegreeTest));
                 it("An edge",  SubcomplexFunctionTest.testFunction(chai, mesh, edgeDegreeTest));
                 it("A closed edge",  SubcomplexFunctionTest.testFunction(chai, mesh, closedEdgeDegreeTest));

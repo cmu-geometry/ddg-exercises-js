@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ * @module Projects
+ */
 class SimplicialComplexOperators {
 
         /** This class implements various operators (e.g. boundary, star, link) on a mesh.
@@ -110,7 +113,7 @@ class SimplicialComplexOperators {
         }
 
         /** Returns true if the given subset is a subcomplex and false otherwise.
-         * @method module:Projects.SimplicialComplexOperators#isSubcomplex
+         * @method module:Projects.SimplicialComplexOperators#isComplex
          * @param {module:Core.MeshSubset} subset A subset of our mesh.
          * @returns {boolean} True if the given subset is a subcomplex and false otherwise.
          */
@@ -119,7 +122,7 @@ class SimplicialComplexOperators {
         }
 
         /** Returns the degree if the given subset is a pure subcomplex and -1 otherwise.
-         * @method module:Projects.SimplicialComplexOperators#pureDegree
+         * @method module:Projects.SimplicialComplexOperators#isPureComplex
          * @param {module:Core.MeshSubset} subset A subset of our mesh.
          * @returns {number} The degree of the given subset if it is a pure subcomplex and -1 otherwise.
          */
