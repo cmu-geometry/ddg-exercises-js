@@ -20,15 +20,11 @@ describe("Solvers", function() {
                         x.set(new Complex(0, 1), 1, 0);
                         x.set(new Complex(0, 1), 2, 0);
 
+                        let expected_residual = 10.43498389;
+
                         let computed_residual = Solvers.residual(M, x);
 
-                        let expected_residual = ComplexDenseMatrix.zeros(3, 1);
-                        expected_residual.set(new Complex(-37, -13), 0, 0);
-                        expected_residual.set(new Complex(-11, -45), 1, 0);
-                        expected_residual.set(new Complex( -2, -42), 2, 0);
-
-                        let error = computed_residual.minus(expected_residual).norm(2);
-                        chai.assert.closeTo(0, error, 1e-8);
+                        chai.assert.closeTo(expected_residual, computed_residual, 1e-8);
                 });
 	});
 
