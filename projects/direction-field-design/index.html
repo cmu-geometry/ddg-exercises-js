@@ -73,6 +73,8 @@
 		let geometry = undefined;
 		let trivialConnections = undefined;
 		let singularity = undefined;
+                let directionField = undefined;
+                let initialAngle = 0.0;
 
 		let filename = "bunny.obj";
 
@@ -90,6 +92,7 @@
 				}));
 			},
 			"Singularity": "1.00",
+			"Initial Angle": initialAngle,
 			"Compute φ": function() {
 				if (mesh.boundaries.length === 0) {
 					// compute connections φ
@@ -97,13 +100,13 @@
 
 					// draw direction field
 					if (phi) {
-						let directionField = buildDirectionField(phi);
-						updateDirectionFieldMesh(directionField);
+						directionField = buildDirectionField(phi);
+						updateDirectionFieldMesh();
 					}
 
 					// cleanup
 					let exceptList = [trivialConnections.P, trivialConnections.A,
-						trivialConnections.hodge1, trivialConnections.d0
+						trivialConnections.hodge1, trivialConnections.d0, trivialConnections.L
 					];
 					exceptList = exceptList.concat(trivialConnections.bases);
 					memoryManager.deleteExcept(exceptList);
@@ -170,6 +173,7 @@
 			io.open();
 
 			gui.add(guiFields, "Singularity").onFinishChange(updateSingularity).listen();
+			gui.add(guiFields, "Initial Angle", 0.0, 2 * Math.PI).step(0.01).onChange(updateInitialAngle).listen();
 			gui.add(guiFields, "Compute φ");
 			gui.add(guiFields, "Reset");
 			gui.add(guiFields, "Show Wireframe").onChange(toggleWireframe).listen();
@@ -209,6 +213,11 @@
 			element.click();
 
 			document.body.removeChild(element);
+		}
+
+		function updateInitialAngle(value) {
+			initialAngle = value;
+                        updateDirectionFieldMesh();
 		}
 
 		function updateDisplayText() {
@@ -560,7 +569,10 @@
 			}
 		}
 
-		function updateDirectionFieldMesh(directionField) {
+		function updateDirectionFieldMesh() {
+                        if (!directionField) {
+                                return; 
+                        }
 			// initialize mesh
 			if (!directionFieldMesh) {
 				let F = mesh.faces.length;
@@ -582,7 +594,9 @@
 				let N = geometry.faceNormal(f);
 
 				let field = directionField[f].times(length);
-				setArrow(directionFieldPositions, f.index, C.minus(field), C.plus(field), N);
+                                let fieldT = N.cross(field); 
+                                let rotField = field.times(Math.cos(initialAngle)).minus(fieldT.times(Math.sin(initialAngle)));
+				setArrow(directionFieldPositions, f.index, C.minus(rotField), C.plus(rotField), N);
 			}
 
 			directionFieldMesh.geometry.attributes.position.needsUpdate = true;
